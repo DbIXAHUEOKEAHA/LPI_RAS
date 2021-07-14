@@ -63,7 +63,7 @@ b = lsq()[1]
 
 #forming data into file
 zero_time = time.process_time()
-data = pd.DataFrame(columns = ['Time', 'lock_in', 'R_keyt2000', 'V_keyt2010', 'N_steps'], dtype = np.float)
+data = pd.DataFrame(columns = ['Time', 'lock_in', 'R_keyt2000', 'V_keyt2010'], dtype = np.float)
 
 filename = r'C:\Users\user\Desktop\Kravtsov\spectrum\one_more_try_' + datetime.today().strftime('%H_%M_%d_%m_%Y') + '.csv'
 
@@ -80,12 +80,12 @@ def animate(i):
     
     cur_time = time.process_time() - zero_time
     
-    data = data.append({'Time': cur_time, 'lock_in': get(lock_in, 'OUTP? 3'), 'R_keyt2000': get(keyt2000, 'FETC?'), 'V_keyt2010': get(keyt2010, 'FETC?'), 'N_steps': 0}, ignore_index = True)
+    data = data.append({'Time': cur_time, 'lock_in': get(lock_in, 'OUTP? 3'), 'R_keyt2000': get(keyt2000, 'FETC?'), 'V_keyt2010': get(keyt2010, 'FETC?')}, ignore_index = True)
     data.to_csv(filename, sep = ' ')
     
     #Plotting data
-    x = np.float(get(lock_in, 'OUTP? 3'))
-    y = np.float(get(keyt2010, 'FETC?'))
+    y = np.float(get(lock_in, 'OUTP? 3'))
+    x = np.float(get(keyt2000, 'FETC?'))
     if y == '0.0E+00\x00\r':
         y = 0
     else:
@@ -94,7 +94,7 @@ def animate(i):
     ax.plot(x * a + b, y, '-o', color = 'blue')
     
     if moving_indicator == True:
-        data = data.append({'Time': cur_time, 'lock': y, 'R_keyt2000': x, 'V_keyt2010': get(keyt2010, 'FETC?'), 'N_steps': (time.process_time() - starting_time) * np.int(lock_in_speed) * 1000}, ignore_index = True)
+        data = data.append({'Time': cur_time, 'lock': y, 'R_keyt2000': x, 'V_keyt2010': get(keyt2010, 'FETC?')}, ignore_index = True)
         data.to_csv(filename, sep = ' ')
     
 
